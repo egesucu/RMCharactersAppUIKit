@@ -65,7 +65,8 @@ extension CharacterTableView: UITableViewDataSource {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell: CharacterTableViewCell = tableView.dequeueReusableCell(for: indexPath)
     let character = viewModel.characters[indexPath.row]
-    let rowViewModel = CharacterCellViewModel(character: character)
+    let rowViewModel = CharacterCellViewModel(character: character, onFavoriteButtonTapped: {
+    })
     cell.configure(with: rowViewModel)
     return cell
   }

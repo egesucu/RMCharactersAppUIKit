@@ -49,7 +49,8 @@ class CharacterTableViewModel {
 
   func viewModelForRow(at indexPath: IndexPath) -> CharacterCellViewModel {
     let character = characters[indexPath.row]
-    return CharacterCellViewModel(character: character)
+    return CharacterCellViewModel(character: character, onFavoriteButtonTapped: {
+    })
   }
 
   func checkForEndOfList(indexPath: IndexPath) {
