@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SQLite3
 import SQLite
+
 
 final class FavoriteService {
     static let shared = FavoriteService()
@@ -17,16 +17,17 @@ final class FavoriteService {
         do {
             let fileURL = try FileManager.default.url(
                 for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-                .appendingPathComponent("favorites2.sqlite")
+                .appendingPathComponent("favorites3.sqlite")
             dbConnection = try Connection(fileURL.path)
 
             if let dbConn = dbConnection, let tableExists = try? dbConn.scalar(
                 "SELECT EXISTS (SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'favCharacters')"
             ) as? Int64, tableExists == 0 {
-                createTable()
+                try createTable()
             }
         } catch {
             print("Error initializing database: \(error)")
+            
         }
     }
 
@@ -50,9 +51,9 @@ final class FavoriteService {
         }
     }
 
-    private func createTable() {
+    private func createTable() throws {
         guard let dbConn = dbConnection else {
-            fatalError("Database connection is nil")
+          throw FavoriteServiceError.databaseConnectionNil
         }
 
         do {
@@ -70,7 +71,7 @@ final class FavoriteService {
                 )
                 """)
         } catch {
-            fatalError("Error creating table: \(error)")
+            throw FavoriteServiceError.tableCreationError
         }
     }
 
