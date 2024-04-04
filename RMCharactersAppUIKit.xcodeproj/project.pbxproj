@@ -16,6 +16,11 @@
 		0D4A748B2BADB00F00AC4F4B /* CharacterEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4A748A2BADB00F00AC4F4B /* CharacterEnums.swift */; };
 		0D4A748E2BADC9DC00AC4F4B /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4A748D2BADC9DC00AC4F4B /* UIExtensions.swift */; };
 		0D4A74912BADD1F000AC4F4B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 0D4A74902BADD1F000AC4F4B /* Kingfisher */; };
+		0D53AC002BBBE55700703ECA /* FavoriteIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D53ABFF2BBBE55700703ECA /* FavoriteIconView.swift */; };
+		0D53AC022BBBE64800703ECA /* FavoriteIconViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D53AC012BBBE64800703ECA /* FavoriteIconViewModel.swift */; };
+		0D53AC042BBC0E4C00703ECA /* FavoriteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D53AC032BBC0E4C00703ECA /* FavoriteService.swift */; };
+		0D53AC0D2BBC179E00703ECA /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 0D53AC0C2BBC179E00703ECA /* SQLite */; };
+		0D53AC0F2BBED4F700703ECA /* FavoriteServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D53AC0E2BBED4F700703ECA /* FavoriteServiceError.swift */; };
 		0DC7B2D32BB185280082B98D /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC7B2D22BB185280082B98D /* HeaderView.swift */; };
 		0DC7B2D92BB2EAA00082B98D /* FilterMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC7B2D82BB2EAA00082B98D /* FilterMenuView.swift */; };
 		0DC7B2DB2BB400730082B98D /* FilterMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC7B2DA2BB400730082B98D /* FilterMenuViewModel.swift */; };
@@ -68,6 +73,10 @@
 		0D4A74872BAB3A4800AC4F4B /* CharcterTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharcterTableViewModel.swift; sourceTree = "<group>"; };
 		0D4A748A2BADB00F00AC4F4B /* CharacterEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterEnums.swift; sourceTree = "<group>"; };
 		0D4A748D2BADC9DC00AC4F4B /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		0D53ABFF2BBBE55700703ECA /* FavoriteIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteIconView.swift; sourceTree = "<group>"; };
+		0D53AC012BBBE64800703ECA /* FavoriteIconViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteIconViewModel.swift; sourceTree = "<group>"; };
+		0D53AC032BBC0E4C00703ECA /* FavoriteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteService.swift; sourceTree = "<group>"; };
+		0D53AC0E2BBED4F700703ECA /* FavoriteServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteServiceError.swift; sourceTree = "<group>"; };
 		0DC7B2D22BB185280082B98D /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		0DC7B2D82BB2EAA00082B98D /* FilterMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMenuView.swift; sourceTree = "<group>"; };
 		0DC7B2DA2BB400730082B98D /* FilterMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMenuViewModel.swift; sourceTree = "<group>"; };
@@ -109,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D53AC0D2BBC179E00703ECA /* SQLite in Frameworks */,
 				0D4A74912BADD1F000AC4F4B /* Kingfisher in Frameworks */,
 				CBBBF2A6CCDBF1DE4D0AB9AB /* Pods_RMCharactersAppUIKit.framework in Frameworks */,
 				0DE08CE42BA99050004BE392 /* SnapKit in Frameworks */,
@@ -148,6 +158,7 @@
 		0D4A747E2BAB036D00AC4F4B /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				0D53ABFE2BBBE54700703ECA /* FavoriteIcon */,
 				0DC7B2D72BB2EA950082B98D /* FilterMenu */,
 				0DC7B2D02BB184F30082B98D /* Header */,
 				0D4A74822BAB041B00AC4F4B /* CharacterTableViewCell */,
@@ -188,6 +199,15 @@
 				0D4A748D2BADC9DC00AC4F4B /* UIExtensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		0D53ABFE2BBBE54700703ECA /* FavoriteIcon */ = {
+			isa = PBXGroup;
+			children = (
+				0D53ABFF2BBBE55700703ECA /* FavoriteIconView.swift */,
+				0D53AC012BBBE64800703ECA /* FavoriteIconViewModel.swift */,
+			);
+			path = FavoriteIcon;
 			sourceTree = "<group>";
 		};
 		0DC7B2D02BB184F30082B98D /* Header */ = {
@@ -325,6 +345,8 @@
 				0DE08CFC2BA9B075004BE392 /* CharacterService.swift */,
 				0DE08D002BA9B0B4004BE392 /* ServiceResponse.swift */,
 				0DE08D042BA9B148004BE392 /* URLBuilder.swift */,
+				0D53AC032BBC0E4C00703ECA /* FavoriteService.swift */,
+				0D53AC0E2BBED4F700703ECA /* FavoriteServiceError.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -364,6 +386,7 @@
 				0DE08CE32BA99050004BE392 /* SnapKit */,
 				0DE08CE52BA99050004BE392 /* SnapKit-Dynamic */,
 				0D4A74902BADD1F000AC4F4B /* Kingfisher */,
+				0D53AC0C2BBC179E00703ECA /* SQLite */,
 			);
 			productName = RMCharactersAppUIKit;
 			productReference = 0DE08CA92BA87A49004BE392 /* RMCharactersAppUIKit.app */;
@@ -442,6 +465,7 @@
 			packageReferences = (
 				0DE08CE22BA99050004BE392 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				0D4A748F2BADD1F000AC4F4B /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				0D53AC0B2BBC179E00703ECA /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 			);
 			productRefGroup = 0DE08CAA2BA87A49004BE392 /* Products */;
 			projectDirPath = "";
@@ -574,9 +598,12 @@
 				0DE08CEA2BA9A28B004BE392 /* ApiCharacter.swift in Sources */,
 				0D4A747D2BAB033A00AC4F4B /* RMCharactersViewModel.swift in Sources */,
 				0DE08CFF2BA9B08A004BE392 /* Filter.swift in Sources */,
+				0D53AC042BBC0E4C00703ECA /* FavoriteService.swift in Sources */,
+				0D53AC022BBBE64800703ECA /* FavoriteIconViewModel.swift in Sources */,
 				0DE08D092BA9B192004BE392 /* PageInfo.swift in Sources */,
 				0DE08CF82BA9A526004BE392 /* RMTabBarViewModel.swift in Sources */,
 				0D4A748E2BADC9DC00AC4F4B /* UIExtensions.swift in Sources */,
+				0D53AC0F2BBED4F700703ECA /* FavoriteServiceError.swift in Sources */,
 				0DE08CF22BA9A3CB004BE392 /* RMFavoritesViewController.swift in Sources */,
 				0DC7B2DB2BB400730082B98D /* FilterMenuViewModel.swift in Sources */,
 				0DC7B2D32BB185280082B98D /* HeaderView.swift in Sources */,
@@ -590,6 +617,7 @@
 				0D4A74842BAB043900AC4F4B /* CharacterTableViewCell.swift in Sources */,
 				0DE08CAF2BA87A49004BE392 /* SceneDelegate.swift in Sources */,
 				0DE08CFD2BA9B075004BE392 /* CharacterService.swift in Sources */,
+				0D53AC002BBBE55700703ECA /* FavoriteIconView.swift in Sources */,
 				0DE08CEF2BA9A390004BE392 /* RMCharactersViewController.swift in Sources */,
 				0D4A748B2BADB00F00AC4F4B /* CharacterEnums.swift in Sources */,
 				0D4A74812BAB03A600AC4F4B /* CharacterTableView.swift in Sources */,
@@ -948,6 +976,14 @@
 				minimumVersion = 7.11.0;
 			};
 		};
+		0D53AC0B2BBC179E00703ECA /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.0;
+			};
+		};
 		0DE08CE22BA99050004BE392 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -963,6 +999,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0D4A748F2BADD1F000AC4F4B /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		0D53AC0C2BBC179E00703ECA /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0D53AC0B2BBC179E00703ECA /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
 		};
 		0DE08CE32BA99050004BE392 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

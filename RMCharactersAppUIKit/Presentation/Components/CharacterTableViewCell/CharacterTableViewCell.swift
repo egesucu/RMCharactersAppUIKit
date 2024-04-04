@@ -10,7 +10,12 @@ import SnapKit
 import Kingfisher
 
 class CharacterTableViewCell: UITableViewCell {
-  var viewModel: CharacterCellViewModel?
+  var viewModel: CharacterCellViewModel? {
+    didSet {
+      updateUIonFavoriteIcon()
+    }
+  }
+
   // UI Components
   private func createLabel(font: UIFont, textColor: UIColor = .black, text: String = "") -> UILabel {
     let label = UILabel()
@@ -51,7 +56,9 @@ class CharacterTableViewCell: UITableViewCell {
       }()
 
   private lazy var nameLabel: UILabel = createLabel(font: .systemFont(ofSize: 17, weight: .medium))
-  private lazy var favoriteIcon: UIImageView = createImageView(systemName: "heart.fill", tintColor: .red)
+  private lazy var favoriteIcon: FavoriteIconView = FavoriteIconView(frame: frame, viewModel: FavoriteIconViewModel(isFavorited: viewModel?.isFavorited ?? false, favoriteIconAction: {
+    self.viewModel?.isFavorited.toggle()
+  }))
   private lazy var characterImageView: UIImageView = createImageView()
   private lazy var speciesText: UILabel = createLabel(font: .systemFont(ofSize: 16, weight: .medium), text: "Species:")
   private lazy var speciesLabel: UILabel = createLabel(font: .systemFont(ofSize: 16, weight: .bold))
@@ -77,6 +84,17 @@ class CharacterTableViewCell: UITableViewCell {
         containerView.addSubview($0)
       }
     characterImageView.addSubview(activityIndicator)
+  }
+
+  private func updateUIonFavoriteIcon() {
+      guard let viewModel = viewModel else { return }
+    self.favoriteIcon.viewModel.isFavorited = viewModel.isFavorited
+    self.updateViewFromViewModelInFavoriteIcon()
+    self.favoriteIcon.viewModel = viewModel.favoriteIconViewModel
+  }
+
+  private func updateViewFromViewModelInFavoriteIcon() {
+      self.favoriteIcon.updateViewFromViewModel()
   }
 
   private func setupGestures() {
@@ -131,7 +149,7 @@ class CharacterTableViewCell: UITableViewCell {
     }
     nameLabel.snp.makeConstraints { make in
       make.leading.top.equalToSuperview().offset(16)
-      make.trailing.equalToSuperview().offset(-40)
+      make.trailing.equalToSuperview().offset(-50)
     }
     favoriteIcon.snp.makeConstraints { make in
       make.trailing.equalToSuperview().offset(-16)
