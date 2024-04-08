@@ -35,7 +35,7 @@ final class RMCharactersViewModel: ObservableObject {
   }
 
   var characterTableViewModel: CharacterTableViewModel {
-    return CharacterTableViewModel(isFilterChanged: isWaiting, characters: apiCharacters)
+    return CharacterTableViewModel(isFilterChanged: isWaiting, characters: apiCharacters, isItFavoritesTable: false)
   }
 
     func updateFilteredCharacters() {
@@ -50,7 +50,6 @@ final class RMCharactersViewModel: ObservableObject {
             .sink { [weak self] _ in
                 self?.apiCharacters.removeAll()
                 self?.fetchCharacters { [weak self] in
-                    print("calistim")
                     self?.isWaiting = false
                   self?.onFilterChange?()
                 }
