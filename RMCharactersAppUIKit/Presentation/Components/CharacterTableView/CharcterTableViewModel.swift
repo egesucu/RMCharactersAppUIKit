@@ -9,10 +9,12 @@ import Foundation
 import Combine
 
 class CharacterTableViewModel {
+  var isItFavoritesTable: Bool
   var onEndReached: (() -> Void)?
   var dataFetched: (() -> Void)?
   var onFilterChange: (() -> Void)?
   var addNewCharacters: (() -> Void)?
+  var toggledFavorite: (() -> Void)?
   var isFetching = false
   var isFilterChanged: Bool {
     didSet {
@@ -21,6 +23,7 @@ class CharacterTableViewModel {
         onFilterChange?()
       } else {
         // add new characters
+        print("addnewcharacters")
         addNewCharacters?()
       }
     }
@@ -35,16 +38,18 @@ class CharacterTableViewModel {
       } else {
         oldCharacters = oldValue
         print("else")
-        print(oldCharacters.count)
       }
       isFetching = false
-      dataFetched?()
+      if !isItFavoritesTable {
+        dataFetched?()
+      }
     }
   }
 
-  init(isFilterChanged: Bool, characters: [AdaptedCharacter]) {
+  init(isFilterChanged: Bool, characters: [AdaptedCharacter], isItFavoritesTable: Bool) {
     self.characters = characters
     self.isFilterChanged = isFilterChanged
+    self.isItFavoritesTable = isItFavoritesTable
   }
 
   func viewModelForRow(at indexPath: IndexPath) -> CharacterCellViewModel {
