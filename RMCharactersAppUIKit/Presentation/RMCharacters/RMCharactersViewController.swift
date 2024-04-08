@@ -44,6 +44,11 @@ final class RMCharactersViewController: UIViewController {
     setupUI()
   }
 
+  override func viewDidAppear(_ animated: Bool) {
+      super.viewDidAppear(animated)
+    characterTableView.reloadTable()
+    }
+
   // MARK: - Helper Methods
   private func setupUI() {
     containerView = UIView()
