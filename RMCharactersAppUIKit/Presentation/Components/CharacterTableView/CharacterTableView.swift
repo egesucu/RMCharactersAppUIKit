@@ -33,7 +33,7 @@ class CharacterTableView: UIView {
     }
 
     viewModel.onFilterChange = { [weak self] in
-        self?.removeAllCharactersFromTableView()
+      self?.removeAllCharactersFromTableView()
     }
   }
 
@@ -66,6 +66,10 @@ extension CharacterTableView: UITableViewDataSource {
     let cell: CharacterTableViewCell = tableView.dequeueReusableCell(for: indexPath)
     let character = viewModel.characters[indexPath.row]
     let rowViewModel = CharacterCellViewModel(character: character, onFavoriteButtonTapped: {
+      if self.viewModel.isItFavoritesTable {
+        self.removeCharacter(at: indexPath.row) // indexPathRow ver o ve celli çıkar
+        print("character id: \(character.id)")
+      }
     })
     cell.configure(with: rowViewModel)
     return cell
@@ -78,6 +82,21 @@ extension CharacterTableView: UITableViewDelegate {
     viewModel.checkForEndOfList(indexPath: indexPath)
   }
 
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    print(indexPath.row)
+  }
+
+  func removeCharacter(at index: Int) {
+    guard index >= 0 && index < viewModel.characters.count else { return }
+    viewModel.characters.remove(at: index)
+    let indexPathToDelete = IndexPath(row: index, section: 0)
+    tableView.deleteRows(at: [indexPathToDelete], with: .top)
+    for num in index..<viewModel.characters.count {
+      let updatedIndexPath = IndexPath(row: num, section: 0)
+      tableView.reloadRows(at: [updatedIndexPath], with: .top)
+    }
+  }
+
   func refreshTableViewWithNewCharacters() {
     let previousDataCount = viewModel.oldCharacters.count
     let newDataCount = viewModel.characters.count
@@ -87,6 +106,7 @@ extension CharacterTableView: UITableViewDelegate {
 
   func removeAllCharactersFromTableView() {
     guard !viewModel.characters.isEmpty else { return }
+    guard tableView.numberOfRows(inSection: 0) > 0 else { return }
     let indexPathsToDelete = (0..<viewModel.characters.count).map { IndexPath(row: $0, section: 0) }
     viewModel.characters.removeAll()
     tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
@@ -98,4 +118,7 @@ extension CharacterTableView: UITableViewDelegate {
     self.tableView.insertRows(at: indexPathsToAdd, with: .top)
   }
 
+  func reloadTable() {
+    tableView.reloadData()
+  }
 }
