@@ -8,7 +8,6 @@
 import Foundation
 import SQLite
 
-
 final class FavoriteService {
     static let shared = FavoriteService()
     private var dbConnection: Connection?
@@ -27,7 +26,6 @@ final class FavoriteService {
             }
         } catch {
             print("Error initializing database: \(error)")
-            
         }
     }
 
