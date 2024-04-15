@@ -8,7 +8,7 @@
 import Foundation
 
 final class FilterMenuViewModel: ObservableObject {
-  
+
   @Published var isFilterMenuOpen = false
   var updateUI: (() -> Void)?
   var filter = Filter(name: "", status: "", species: "", gender: "") {
@@ -17,7 +17,7 @@ final class FilterMenuViewModel: ObservableObject {
     }
   }
   var setFilterParameters: (Filter) -> Void
-  
+
   init(isFilterMenuOpen: Bool,
        filter: Filter = Filter(name: "", status: "", species: "", gender: ""),
        setFilterParameters: @escaping (Filter) -> Void) {

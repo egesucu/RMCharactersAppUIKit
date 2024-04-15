@@ -16,7 +16,6 @@ class CharacterCellViewModel {
   private var cancellables = Set<AnyCancellable>()
   var isFavorited: Bool = false
   var onFavoriteButtonTapped: () -> Void
-
   init(character: AdaptedCharacter, onFavoriteButtonTapped: @escaping () -> Void) {
     self.character = character
     self.onFavoriteButtonTapped = onFavoriteButtonTapped
@@ -30,6 +29,7 @@ class CharacterCellViewModel {
   var favoriteIconViewModel: FavoriteIconViewModel {
     return FavoriteIconViewModel(isFavorited: isFavorited, favoriteIconAction: {
       self.toggleFav(character: self.character)
+      self.onFavoriteButtonTapped()
     })
   }
 

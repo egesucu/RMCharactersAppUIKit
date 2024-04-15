@@ -1,5 +1,5 @@
 //
-//  RMCharactersViewController.swift
+//  RMFavoritesViewController.swift
 //  RMCharactersAppUIKit
 //
 //  Created by Selman Aslan on 19.03.2024.
@@ -8,22 +8,18 @@
 import UIKit
 import SnapKit
 
-final class RMCharactersViewController: UIViewController {
-
-  // MARK: - Properties
-  private let viewModel = RMCharactersViewModel()
+final class RMFavoritesViewController: UIViewController {
+  private let viewModel = RMFavoritesViewModel()
   private var filterMenuHeightConstraint: Constraint?
   private var filterButtonHeightConstraint: Constraint?
   private var containerView: UIView!
-
-  // MARK: - UI Components
   private lazy var characterTableView: CharacterTableView = {
     let view = CharacterTableView(viewModel: viewModel.characterTableViewModel)
     return view
   }()
 
   private lazy var headerView: HeaderView = {
-    let view = HeaderView(title: "Rick&Morty\nCharacters")
+    let view = HeaderView(title: "Favorited\nCharacters")
     return view
   }()
 
@@ -37,19 +33,21 @@ final class RMCharactersViewController: UIViewController {
     return view
   }()
 
-  // MARK: - Lifecycle Methods
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.setNavigationBarHidden(true, animated: false)
     setupUI()
+    viewModel.filteredCharacters = viewModel.dbCharacters
   }
 
   override func viewDidAppear(_ animated: Bool) {
-      super.viewDidAppear(animated)
+    super.viewDidAppear(animated)
+    viewModel.fetchFavoriteCharacters()
+    viewModel.applyFilterToCharacters()
+    characterTableView.viewModel.characters = viewModel.filteredCharacters
     characterTableView.reloadTable()
-    }
+  }
 
-  // MARK: - Helper Methods
   private func setupUI() {
     containerView = UIView()
     view.addSubview(containerView)
@@ -88,14 +86,9 @@ final class RMCharactersViewController: UIViewController {
       make.leading.trailing.bottom.equalToSuperview()
     }
 
-    characterTableView.viewModel.onEndReached = { [weak self] in
-      self?.viewModel.fetchCharacters {
-        self?.characterTableView.viewModel.characters = self?.viewModel.apiCharacters ?? []
-      }
-    }
-
     characterTableView.viewModel.addNewCharacters = { [weak self] in
-      self?.characterTableView.viewModel.characters = self?.viewModel.apiCharacters ?? []
+      self?.characterTableView.viewModel.characters = self?.viewModel.filteredCharacters ?? []
+      self?.characterTableView.addNewCharactersToTableView()
     }
 
     viewModel.onFilterChange = { [weak self] in
