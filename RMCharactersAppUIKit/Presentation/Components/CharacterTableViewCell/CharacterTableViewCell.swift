@@ -168,7 +168,7 @@ class CharacterTableViewCell: UITableViewCell {
 
     if let imageUrl = viewModel.imageUrl {
         activityIndicator.startAnimating()
-        characterImageView.kf.setImage(with: imageUrl, progressBlock: { receivedSize, totalSize in
+      characterImageView.kf.setImage(with: imageUrl, options: [.forceRefresh], progressBlock: { receivedSize, totalSize in
         }) { [weak self] result in
             DispatchQueue.main.async {
                 self?.activityIndicator.stopAnimating()
