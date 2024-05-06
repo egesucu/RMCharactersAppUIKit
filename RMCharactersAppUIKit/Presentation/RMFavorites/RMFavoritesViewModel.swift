@@ -13,13 +13,26 @@ class RMFavoritesViewModel {
   private let databaseService = FavoriteService()
   private let characterService = CharacterService()
   private var cancellables = Set<AnyCancellable>()
-  var filteredCharacters: [AdaptedCharacter] = []
+  var filteredCharacters: [AdaptedCharacter] = [] {
+    didSet {
+      print("db Characters")
+      print(dbCharacters.count)
+      self.fetchFavoriteCharacters()
+      if dbCharacters.count == 0 {
+        isCharacterListEmpty!(true)
+      } else {
+        isCharacterListEmpty!(false)
+      }
+    }
+  }
+
   @Published var dbCharacters: [AdaptedCharacter] = []
   @Published var selectedCharacter: AdaptedCharacter?
+  var isCharacterListEmpty: ((Bool) -> Void)?
   @Published var favoriteIconTapped = false
   @Published var isFilterMenuOpen = false
   @Published var filter = Filter(name: "", status: "", species: "", gender: "")
-  @Published var isDetailsViewOpen = false
+  var onCharacterDetailsOpened: (() -> Void)?
   var isWaiting: Bool = false {
     didSet {
       onFilterChange?()
@@ -39,7 +52,19 @@ class RMFavoritesViewModel {
   }
 
   var characterTableViewModel: CharacterTableViewModel {
-    return CharacterTableViewModel(isFilterChanged: isWaiting, characters: dbCharacters, isItFavoritesTable: true)
+    return CharacterTableViewModel(
+      isFilterChanged: isWaiting,
+      characters: dbCharacters,
+      isItFavoritesTable: true,
+      onCharacterDetailsButtonTapped: { character in
+        print(character.id)
+        self.selectedCharacter = character
+        self.onCharacterDetailsOpened?()
+      },
+      removedCharacter: { removedCharacter in
+        self.filteredCharacters.removeAll { $0 == removedCharacter }
+      }
+    )
   }
 
   func filterCharacters() {
@@ -56,34 +81,32 @@ class RMFavoritesViewModel {
         self?.isWaiting = false
       }
       .store(in: &cancellables)
-
   }
 
   func applyFilterToCharacters() {
-      filteredCharacters = dbCharacters.filter { character in
-          return isCharacterMatchingFilters(character)
-      }
-      print(filteredCharacters.count)
+    filteredCharacters = dbCharacters.filter { character in
+      return isCharacterMatchingFilters(character)
+    }
+    print(filteredCharacters.count)
     filterValidCharacters()
     filteredCharacters = filteredCharacters.reversed()
   }
 
   private func isCharacterMatchingFilters(_ character: AdaptedCharacter) -> Bool {
-      let nameMatches = filter.name.isEmpty || character.name?.lowercased().contains(filter.name.lowercased()) == true
-      let speciesMatches = filter.species.isEmpty || character.species?.lowercased().contains(filter.species.lowercased()) == true
-      let statusMatches = filter.status.isEmpty || character.status?.contains(filter.status) == true
-      let genderMatches = filter.gender.isEmpty || character.gender?.contains(filter.gender) == true
-
-      return nameMatches && speciesMatches && statusMatches && genderMatches
+    let nameMatches = filter.name.isEmpty || character.name?.lowercased().contains(filter.name.lowercased()) == true
+    let speciesMatches = filter.species.isEmpty || character.species?.lowercased().contains(filter.species.lowercased()) == true
+    let statusMatches = filter.status.isEmpty || character.status?.contains(filter.status) == true
+    let genderMatches = filter.gender.isEmpty || character.gender?.contains(filter.gender) == true
+    return nameMatches && speciesMatches && statusMatches && genderMatches
   }
 
   func filterValidCharacters() {
-          filteredCharacters = filteredCharacters.filter { filteredCharacter in
-              return dbCharacters.contains { dbCharacter in
-                  dbCharacter.id == filteredCharacter.id
-              }
-          }
+    filteredCharacters = filteredCharacters.filter { filteredCharacter in
+      return dbCharacters.contains { dbCharacter in
+        dbCharacter.id == filteredCharacter.id
       }
+    }
+  }
 
   func fetchFavoriteCharacters() {
     self.dbCharacters.removeAll()
