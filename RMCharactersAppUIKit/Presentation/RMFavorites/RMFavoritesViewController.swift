@@ -18,6 +18,28 @@ final class RMFavoritesViewController: UIViewController {
     return view
   }()
 
+  private lazy var emptyStateText: UILabel = {
+    let label = UILabel()
+    label.text = "It looks like you haven't added\nany favorite characters yet."
+    label.textAlignment = .center
+    label.textColor = .gray
+    label.numberOfLines = 0
+    label.isHidden = true // Başlangıçta gizli olacak
+    label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+    return label
+  }()
+
+  private lazy var emptyStateTitle: UILabel = {
+    let label = UILabel()
+    label.text = "Oops..."
+    label.textAlignment = .center
+    label.textColor = .gray
+    label.numberOfLines = 0
+    label.isHidden = true // Başlangıçta gizli olacak
+    label.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
+    return label
+  }()
+
   private lazy var headerView: HeaderView = {
     let view = HeaderView(title: "Favorited\nCharacters")
     return view
@@ -46,6 +68,7 @@ final class RMFavoritesViewController: UIViewController {
     viewModel.applyFilterToCharacters()
     characterTableView.viewModel.characters = viewModel.filteredCharacters
     characterTableView.reloadTable()
+    print("favorites did appear")
   }
 
   private func setupUI() {
@@ -53,6 +76,19 @@ final class RMFavoritesViewController: UIViewController {
     view.addSubview(containerView)
     view.addSubview(headerView)
     view.addSubview(characterTableView)
+    view.addSubview(emptyStateText)
+    view.addSubview(emptyStateTitle)
+    emptyStateText.snp.makeConstraints { make in
+      make.centerX.equalTo(characterTableView)
+      make.centerY.equalTo(characterTableView).offset(-50)
+      make.leading.trailing.equalTo(characterTableView).inset(20)
+    }
+
+    emptyStateTitle.snp.makeConstraints { make in
+      make.centerX.equalTo(emptyStateText)
+      make.centerY.equalTo(emptyStateText.snp.top).offset(-15)
+      make.leading.trailing.equalTo(characterTableView).inset(20)
+    }
 
     containerView.snp.makeConstraints { make in
       make.top.equalTo(headerView.snp.bottom)
@@ -86,7 +122,12 @@ final class RMFavoritesViewController: UIViewController {
       make.leading.trailing.bottom.equalToSuperview()
     }
 
+    viewModel.onCharacterDetailsOpened = {
+      self.toggleDetailsView()
+    }
+
     characterTableView.viewModel.addNewCharacters = { [weak self] in
+
       self?.characterTableView.viewModel.characters = self?.viewModel.filteredCharacters ?? []
       self?.characterTableView.addNewCharactersToTableView()
     }
@@ -100,6 +141,20 @@ final class RMFavoritesViewController: UIViewController {
     headerView.onFilterButtonTapped = {
       self.toggleFilterMenu()
     }
+
+    viewModel.isCharacterListEmpty = { [weak self] isEmpty in
+      print("characterlist degisti")
+      print(self?.viewModel.filteredCharacters.count)
+      if isEmpty {
+        self?.emptyStateText.isHidden = false
+        self?.emptyStateTitle.isHidden = false
+        self?.characterTableView.isHidden = true
+      } else {
+        self?.emptyStateText.isHidden = true
+        self?.emptyStateTitle.isHidden = true
+        self?.characterTableView.isHidden = false
+      }
+    }
   }
 
   private func toggleFilterMenu() {
@@ -111,5 +166,15 @@ final class RMFavoritesViewController: UIViewController {
       self.filterButtonHeightConstraint?.update(offset: newFilterHeight)
       self.view.layoutIfNeeded()
     }
+  }
+
+  private func toggleDetailsView() {
+    let detailsVC = CHDetailsViewController( viewModel: CHDetailsViewModel(character: viewModel.selectedCharacter!))
+    let navController = UINavigationController(rootViewController: detailsVC)
+    navController.modalPresentationStyle = .pageSheet
+    detailsVC.dismissSheet = {
+      self.viewDidAppear(true)
+    }
+    present(navController, animated: true, completion: nil)
   }
 }

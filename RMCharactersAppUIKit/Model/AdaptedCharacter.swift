@@ -5,7 +5,7 @@
 //  Created by Selman Aslan on 19.03.2024.
 //
 
-struct AdaptedCharacter: Codable, Identifiable {
+struct AdaptedCharacter: Codable, Identifiable, Equatable {
   let id: String
   let name: String?
   let image: String?

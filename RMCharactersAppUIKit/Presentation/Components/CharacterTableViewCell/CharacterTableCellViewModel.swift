@@ -15,10 +15,14 @@ class CharacterCellViewModel {
   var favoritePublisher = PassthroughSubject<Bool, Never>()
   private var cancellables = Set<AnyCancellable>()
   var isFavorited: Bool = false
+  var onCharacterDetailsButtonTapped: (AdaptedCharacter) -> Void
   var onFavoriteButtonTapped: () -> Void
-  init(character: AdaptedCharacter, onFavoriteButtonTapped: @escaping () -> Void) {
+  init(character: AdaptedCharacter,
+       onFavoriteButtonTapped: @escaping () -> Void,
+       onCharacterDetailsButtonTapped: @escaping (AdaptedCharacter) -> Void) {
     self.character = character
     self.onFavoriteButtonTapped = onFavoriteButtonTapped
+    self.onCharacterDetailsButtonTapped = onCharacterDetailsButtonTapped
     isCharacterInFavorites(characterId: String(character.id))
     favoritePublisher
         .receive(on: DispatchQueue.main)

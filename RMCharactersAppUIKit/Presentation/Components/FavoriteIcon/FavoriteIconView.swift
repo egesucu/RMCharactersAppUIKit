@@ -9,6 +9,7 @@ import UIKit
 
 class FavoriteIconView: UIView {
     var viewModel: FavoriteIconViewModel
+    var imageSize = CGSize(width: 24, height: 21)
 
     private lazy var favoriteButton: UIButton = {
         let button = UIButton(type: .system)
@@ -36,20 +37,21 @@ class FavoriteIconView: UIView {
         }
     }
 
-   func updateViewFromViewModel() {
+  func updateViewFromViewModel() {
       let imageName = viewModel.isFavorited ? "heart.fill" : "heart"
       let tintColor = viewModel.isFavorited ? UIColor.red : UIColor.black
-
+      let image = UIImage(
+        systemName: imageName)?.withConfiguration(UIImage.SymbolConfiguration(pointSize: imageSize.height,
+                                                                                                weight: .regular)
+        )
       UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-          self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+          self.favoriteButton.setImage(image, for: .normal)
           self.favoriteButton.tintColor = tintColor
       })
   }
-
     @objc private func favoriteButtonTapped() {
         viewModel.favoriteIconAction?()
       viewModel.isFavorited.toggle()
       updateViewFromViewModel()
     }
 }
-

@@ -104,6 +104,10 @@ final class RMCharactersViewController: UIViewController {
       self?.filterMenuView.viewModel.filter = (self?.viewModel.filter)!
     }
 
+    viewModel.onCharacterDetailsOpened = {
+      self.toggleDetailsView()
+    }
+
     headerView.onFilterButtonTapped = {
       self.toggleFilterMenu()
     }
@@ -118,5 +122,15 @@ final class RMCharactersViewController: UIViewController {
       self.filterButtonHeightConstraint?.update(offset: newFilterHeight)
       self.view.layoutIfNeeded()
     }
+  }
+
+  private func toggleDetailsView() {
+    let detailsVC = CHDetailsViewController( viewModel: CHDetailsViewModel(character: viewModel.selectedCharacter!))
+    let navController = UINavigationController(rootViewController: detailsVC)
+    navController.modalPresentationStyle = .pageSheet
+    detailsVC.dismissSheet = {
+      self.viewDidAppear(true)
+    }
+    present(navController, animated: true, completion: nil)
   }
 }

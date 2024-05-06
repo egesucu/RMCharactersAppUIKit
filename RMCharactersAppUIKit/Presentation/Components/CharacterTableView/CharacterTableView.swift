@@ -19,6 +19,27 @@ class CharacterTableView: UIView {
   }
 
   private var tableView: UITableView!
+  private lazy var emptyStateText: UILabel = {
+         let label = UILabel()
+         label.text = "No characters found matching\nyour search criteria.\nPlease try adjusting your filters."
+         label.textAlignment = .center
+         label.textColor = .gray
+         label.numberOfLines = 0
+         label.isHidden = true // Başlangıçta gizli olacak
+    label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+         return label
+     }()
+
+  private lazy var emptyStateTitle: UILabel = {
+         let label = UILabel()
+         label.text = "Sorry..."
+         label.textAlignment = .center
+         label.textColor = .gray
+         label.numberOfLines = 0
+         label.isHidden = true // Başlangıçta gizli olacak
+    label.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
+         return label
+     }()
 
   // MARK: - Initializer
   init(frame: CGRect = .zero, viewModel: CharacterTableViewModel) {
@@ -34,6 +55,14 @@ class CharacterTableView: UIView {
 
     viewModel.onFilterChange = { [weak self] in
       self?.removeAllCharactersFromTableView()
+    }
+
+    viewModel.isFilteredCharactersEmpty = { [weak self] isEmpty in
+        DispatchQueue.main.async {
+            self?.emptyStateText.isHidden = !isEmpty
+          self?.emptyStateTitle.isHidden = !isEmpty
+          self?.tableView.isHidden = isEmpty
+        }
     }
   }
 
@@ -53,6 +82,19 @@ class CharacterTableView: UIView {
     tableView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
+    addSubview(emptyStateText)
+    addSubview(emptyStateTitle)
+    emptyStateText.snp.makeConstraints { make in
+      make.centerX.equalTo(tableView)
+      make.centerY.equalTo(tableView).offset(-50)
+        make.leading.trailing.equalTo(tableView).inset(20)
+    }
+
+    emptyStateTitle.snp.makeConstraints { make in
+      make.centerX.equalTo(emptyStateText)
+      make.centerY.equalTo(emptyStateText.snp.top).offset(-15)
+        make.leading.trailing.equalTo(tableView).inset(20)
+    }
   }
 }
 
@@ -69,7 +111,10 @@ extension CharacterTableView: UITableViewDataSource {
       if self.viewModel.isItFavoritesTable {
         self.removeCharacter(at: indexPath.row) // indexPathRow ver o ve celli çıkar
         print("character id: \(character.id)")
+        self.viewModel.removedCharacter!(character)
       }
+    }, onCharacterDetailsButtonTapped: { character in
+      self.viewModel.onCharacterDetailsButtonTapped(character)
     })
     cell.configure(with: rowViewModel)
     return cell
