@@ -56,7 +56,10 @@ class CharacterTableViewCell: UITableViewCell {
       }()
 
   private lazy var nameLabel: UILabel = createLabel(font: .systemFont(ofSize: 17, weight: .medium))
-  private lazy var favoriteIcon: FavoriteIconView = FavoriteIconView(frame: frame, viewModel: FavoriteIconViewModel(isFavorited: viewModel?.isFavorited ?? false, favoriteIconAction: {
+  private lazy var favoriteIcon: FavoriteIconView = FavoriteIconView(frame: frame,
+                                                                     viewModel: FavoriteIconViewModel(
+                                                                      isFavorited: viewModel?.isFavorited ?? false,
+                                                                      favoriteIconAction: {
     self.viewModel?.isFavorited.toggle()
   }))
   private lazy var characterImageView: UIImageView = createImageView()
@@ -87,7 +90,7 @@ class CharacterTableViewCell: UITableViewCell {
   }
 
   private func updateUIonFavoriteIcon() {
-      guard let viewModel = viewModel else { return }
+    guard let viewModel = viewModel else { return }
     self.favoriteIcon.viewModel.isFavorited = viewModel.isFavorited
     self.updateViewFromViewModelInFavoriteIcon()
     self.favoriteIcon.viewModel = viewModel.favoriteIconViewModel
@@ -181,9 +184,15 @@ class CharacterTableViewCell: UITableViewCell {
   }
 
   @objc private func containerTapped() {
-    // Container view'a dokunulduğunda yapılacak işlem
-    print("Container view tapped")
-    print(viewModel?.character.id ?? "Character ID test error")
+    viewModel?.onCharacterDetailsButtonTapped(viewModel?.character ?? AdaptedCharacter(id: "0",
+                                                                                       name: "Err",
+                                                                                       image: "Err",
+                                                                                       status: "Err",
+                                                                                       species: "Err",
+                                                                                       gender: "Err",
+                                                                                       origin: "Err",
+                                                                                       location: "Err",
+                                                                                       episode: 0))
   }
 
   @objc private func favIconTapped() {
